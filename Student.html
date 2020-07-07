@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>学生管理系统</title>
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" >
+        $(function(){
+            //查询
+            var select_id_btn = $("#select_id_btn");
+            select_id_btn.click(function () {
+                var select_id_btn_text = $("#select_id_btn_text");
+                var url = "Student/List/"+select_id_btn_text.val();
+                $.post({
+                    url:url,
+                    success:function(result){
+                        alert(result.name)
+                        alert(result.sex)
+                        alert(result.age)
+                        $("#name").val(result.name);
+                    }
+                });
+            });
+
+        });
+        //删除一个
+        function deleteById(id){
+            var url = "delete/" + id;
+                alert("删除成功");
+                location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <div align="center">
+        <h1>学生管理系统</h1>
+    </div>
+    <div class = "change">
+        <form class = "add" action="/addSuccess" method="post">
+            新增一个：<input type="text" name="id" placeholder="id" maxlength="20">
+            <input type="text" id="name" name="name" placeholder="name" maxlength="20">
+            <input type="text" name="age" placeholder="age" maxlength="20">
+            <input type="text" name="sex" placeholder="sex" maxlength="20">
+            <input name="Submit" type="submit"value="提交">
+        </form>
+    </div>
+    <div>
+        通过ID查询对应信息：<input type="text" id="select_id_btn_text">
+        <button id="select_id_btn">查询</button>
+    </div>
+
+    <div>
+        <table align="center" border="1px" cellpadding="10%" >
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>sex</th>
+                <th>age</th>
+            </tr>
+            </thead>
+            <tr th:each="show:${saveStudent}">
+                <td th:text="${show.id}"></td>
+                <td th:text="${show.name}"></td>
+                <td th:text="${show.sex}"></td>
+                <td th:text="${show.age}"></td>
+                <td><a th:href="'modify/'+${show.id}" >修改</a></td>
+                <td><a href='#' th:onclick="|deleteById('${show.id}')|" >删除</a> </td>
+
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
